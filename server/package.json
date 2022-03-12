@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "apollo-server": "^3.6.4",
+    "bcryptjs": "^2.4.3",
+    "graphql": "^16.3.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.2.5",
+    "validator": "^13.7.0"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "name": "server",
+  "version": "1.0.0",
+  "main": "server.js",
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  },
+  "author": "Youssef",
+  "license": "ISC",
+  "description": ""
+}
