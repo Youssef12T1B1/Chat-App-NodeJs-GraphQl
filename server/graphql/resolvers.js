@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const jwtSecret = require('../config/.env').Jwt_Sec
 const { UserInputError, AuthenticationError} = require('apollo-server')
+const { FromStuff }= require('./form')
 module.exports ={
     Query: {
         getUser:  async (parent,args, context)=> {
@@ -19,8 +20,12 @@ module.exports ={
                    
                 })
             }
-              const users = await User.find()
-              return users
+              const users = await User.find({username : {$ne : user.username}})
+              return users.map( user =>{
+                    return  FromStuff(user)
+                  })
+
+              
           }catch(err){
             console.log(err);
             throw err
@@ -106,8 +111,8 @@ module.exports ={
              
              console.log(err);
           
-                if(err.keyPattern.username === 1) err.username = err.keyValue.username +' is Already taken'
-                if(err.keyPattern.email === 1) err.email = err.keyValue.email +' is Already taken'
+                if( err.keyPattern && err.keyPattern.username === 1) err.username = err.keyValue.username +' is Already taken'
+                if( err.keyPattern && err.keyPattern.email === 1) err.email = err.keyValue.email +' is Already taken'
                 if(err.name === 'ValidationError' ) err.email = err.errors.email.message
 
               
