@@ -1,25 +1,18 @@
 const User = require('../models/user')
+const Message = require('../models/message')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const jwtSecret = require('../config/.env').Jwt_Sec
 const { UserInputError, AuthenticationError} = require('apollo-server')
 const { FromStuff }= require('./form')
+const { create } = require('../models/message')
 module.exports ={
     Query: {
-        getUser:  async (parent,args, context)=> {
+        getUser:  async (parent,args, { user })=> {
          
           try {
-            let user
-            if(context.req && context.req.headers.authorization){
-                const token = context.req.headers.authorization.split(' ')[1]
-                jwt.verify(token, jwtSecret, (err, decodedToken)=>{
-                    if(err){
-                        throw new AuthenticationError('Authetication Failed')
-                    }
-                    user = decodedToken
-                   
-                })
-            }
+            if(!user) throw new AuthenticationError('Authetication Failed')
+          
               const users = await User.find({username : {$ne : user.username}})
               return users.map( user =>{
                     return  FromStuff(user)
@@ -108,21 +101,41 @@ module.exports ={
                 return user 
 
             }catch(err){
-           
           
              if(err.code === 11000 && err.keyValue.username ) err.username = 'that username is already used'
              if(err.code === 11000 && err.keyValue.email ) err.email = 'that Email is already used'
              if(err.name === 'ValidationError') err.email = 'Please Entre a valide Email'
                 
-             
-                
-          
-               
-
-              
                 throw new UserInputError('Err', {errors : err})
             }
 
+
+        },
+        sendMessage: async (parent, {receiver, body}, {user})=>{
+            try {
+                if(!user) throw new AuthenticationError('Authetication Failed')
+
+                const receiverTest = await User.findOne({username: receiver})
+                if(!receiverTest){
+                    throw new UserInputError('User not Found')
+                }
+                else if(receiverTest.username === user.username){
+                    throw new UserInputError('No Messages to Yourself dude')
+                }
+                if(body.trim()=== '') throw new UserInputError('Message is Empty')
+
+                const message = await  Message.create({
+                    sender: user.username,
+                    receiver,
+                    body
+                })
+                return message
+
+
+            } catch (err) {
+                console.log(err);
+                throw err
+            }
 
         }
     }
