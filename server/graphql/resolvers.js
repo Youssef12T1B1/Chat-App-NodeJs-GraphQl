@@ -108,15 +108,19 @@ module.exports ={
                 return user 
 
             }catch(err){
-             
-             console.log(err);
+           
           
-                if( err.keyPattern && err.keyPattern.username === 1) err.username = err.keyValue.username +' is Already taken'
-                if( err.keyPattern && err.keyPattern.email === 1) err.email = err.keyValue.email +' is Already taken'
-                if(err.name === 'ValidationError' ) err.email = err.errors.email.message
+             if(err.code === 11000 && err.keyValue.username ) err.username = 'that username is already used'
+             if(err.code === 11000 && err.keyValue.email ) err.email = 'that Email is already used'
+             if(err.name === 'ValidationError') err.email = 'Please Entre a valide Email'
+                
+             
+                
+          
+               
 
               
-                throw new UserInputError('Err', {errors: err})
+                throw new UserInputError('Err', {errors : err})
             }
 
 
