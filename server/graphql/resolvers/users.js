@@ -1,11 +1,10 @@
-const User = require('../models/user')
-const Message = require('../models/message')
+const User = require('../../models/user')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-const jwtSecret = require('../config/.env').Jwt_Sec
+const jwtSecret = require('../../config/.env').Jwt_Sec
 const { UserInputError, AuthenticationError} = require('apollo-server')
-const { FromStuff }= require('./form')
-const { create } = require('../models/message')
+const { FromStuff }= require('../form')
+
 module.exports ={
     Query: {
         getUser:  async (parent,args, { user })=> {
@@ -83,11 +82,7 @@ module.exports ={
                  if(confirmPassword.trim() === '') errors.confirmPassword = 'Please repeat the Same Password'
                  if(confirmPassword !== password) errors.confirmPassword = 'Passwords must match'
                
-                // const userUsername = await User.findOne({username})
-                // const userEmail = await User.findOne({email})
-                // if(userUsername) errors.username = "Username is taken"
-                // if(userEmail) errors.email = "E-mail is taken"
-
+              
                 if(Object.keys(errors).length>0){
                     throw errors
                 } 
@@ -111,33 +106,7 @@ module.exports ={
 
 
         },
-        sendMessage: async (parent, {receiver, body}, {user})=>{
-            try {
-                if(!user) throw new AuthenticationError('Authetication Failed')
 
-                const receiverTest = await User.findOne({username: receiver})
-                if(!receiverTest){
-                    throw new UserInputError('User not Found')
-                }
-                else if(receiverTest.username === user.username){
-                    throw new UserInputError('No Messages to Yourself dude')
-                }
-                if(body.trim()=== '') throw new UserInputError('Message is Empty')
-
-                const message = await  Message.create({
-                    sender: user.username,
-                    receiver,
-                    body
-                })
-                return message
-
-
-            } catch (err) {
-                console.log(err);
-                throw err
-            }
-
-        }
     }
 
 }

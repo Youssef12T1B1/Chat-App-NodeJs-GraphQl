@@ -5,9 +5,6 @@ module.exports = context =>{
     if(context.req && context.req.headers.authorization){
         const token = context.req.headers.authorization.split(' ')[1]
         jwt.verify(token, jwtSecret, (err, decodedToken)=>{
-            if(err){
-                //throw new AuthenticationError('Authetication Failed')
-            }
            
             context.user = decodedToken
            

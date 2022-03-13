@@ -18,7 +18,7 @@ type Message {
   type Query {
     getUser: [User]!
     login (username:String!, password:String!): User!
-    getMessage : [Message!]!
+    getMessage(sender: String!): [Message]!
   }
 type Mutation{
     addUser(
