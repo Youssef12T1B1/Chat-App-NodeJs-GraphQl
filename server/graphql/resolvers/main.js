@@ -6,6 +6,10 @@ module.exports={
         createdAt : (parent)=>  parent.createdAt.toISOString()
     
     },
+    User:{
+        createdAt : (parent)=>  parent.createdAt.toISOString()
+    
+    },
     Query:{
         ...userResolver.Query,
         ...messageResolver.Query

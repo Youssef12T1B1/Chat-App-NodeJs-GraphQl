@@ -1,4 +1,5 @@
 const User = require('../../models/user')
+const Message = require('../../models/message')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const jwtSecret = require('../../config/.env').Jwt_Sec
@@ -12,12 +13,21 @@ module.exports ={
           try {
             if(!user) throw new AuthenticationError('Authetication Failed')
           
-              const users = await User.find({username : {$ne : user.username}})
-              return users.map( user =>{
-                    return  FromStuff(user)
-                  })
+              let users = await User.find({username : {$ne : user.username}}).select('username createdAt')
+             
+              const AlluserMessages = await Message.find(
+                { $or:[ { sender:user.username}, {receiver:user.username}]}
+            ).sort({'createdAt': -1})
+               
 
-              
+            users = users.map((Newuser) => {
+                    const latestMessage = AlluserMessages.find(
+                        (m) => m.sender === Newuser.username || m.receiver === Newuser.username 
+                    )
+                    Newuser.latestMessage = latestMessage
+                    return Newuser
+            })
+              return users
           }catch(err){
             console.log(err);
             throw err

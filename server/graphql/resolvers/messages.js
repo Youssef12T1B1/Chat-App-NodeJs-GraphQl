@@ -19,7 +19,7 @@ module.exports ={
                     sender:{  $in: usernames }
 
                 }
-                ).sort({'createdAt': -1})
+                ).sort({'createdAt': 1})
 
                return messages
             } catch (err) {
