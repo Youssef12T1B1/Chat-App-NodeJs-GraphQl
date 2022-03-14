@@ -36,7 +36,7 @@ export default function MainPage(){
     </Container>
   </Navbar>
   </Row>
-  <Row className="bg-white ">
+  <Row >
   <Users />
   <Messages/>
 

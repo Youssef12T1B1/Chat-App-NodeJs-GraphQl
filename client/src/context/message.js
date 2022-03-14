@@ -5,17 +5,18 @@ const MessageStateContext = createContext()
 const  MessageDispatchContext = createContext()
 
 const messageReducer = (state, action) =>{
-    let Otherusers
+    let Otherusers, userFound
+    const {username,  messages,message } = action.payload
     switch(action.type){
         case 'SetUSERS':
             return{
                 ...state,
                 users: action.payload
             }
-        case 'SeUserMessages':
-            const { username, messages } = action.payload
+        case 'SetUserMessages':
+          
              Otherusers = [...state.users]
-             const userFound = Otherusers.findIndex((u)=> u.username === username)
+              userFound = Otherusers.findIndex((u)=> u.username === username)
              Otherusers[userFound] = { ...Otherusers[userFound] , messages}
              return{
                  ...state,
@@ -31,7 +32,24 @@ const messageReducer = (state, action) =>{
                 ...state,
                 users : Otherusers
             }
-  
+        case 'AddMessage':
+            Otherusers = [...state.users]
+            
+             userFound = Otherusers.findIndex((u)=> u.username === username)
+             let NewUser = {
+                 ...Otherusers[userFound],
+                 messages: [message, ...Otherusers[userFound].messages]
+             }
+             Otherusers[userFound] = NewUser
+             
+             return {
+                 ...state,
+                 users : Otherusers,
+             }
+
+
+
+
         default:
             throw new Error(`Unknown action type: ${action.type}`)           
     }

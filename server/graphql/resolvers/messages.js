@@ -3,7 +3,7 @@ const Message = require('../../models/message')
 
 const { UserInputError, AuthenticationError} = require('apollo-server')
 
-
+// const pubsub = new PubSub()
 module.exports ={
     Query:{
         getMessage : async (parent, {sender}, {user})=>{
@@ -19,7 +19,7 @@ module.exports ={
                     sender:{  $in: usernames }
 
                 }
-                ).sort({'createdAt': 1})
+                ).sort({'createdAt': -1})
 
                return messages
             } catch (err) {
@@ -51,6 +51,8 @@ module.exports ={
                     receiver,
                     body
                 })
+
+                // pubsub.publish('NewMessage', {newMessage: message})
                 return message
 
 
@@ -60,6 +62,10 @@ module.exports ={
             }
 
         }
+    },
+
+    Subscription:{
+        newMessage:()=> pubsub.asyncIterator(['NewMessage'])
     }
 
 }

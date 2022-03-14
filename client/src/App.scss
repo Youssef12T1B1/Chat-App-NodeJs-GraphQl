@@ -14,9 +14,26 @@ body {
 }
 
 .dispaly_users:hover {
-  background-color: gray;
+  border: 1px solid rgba(233, 149, 33, 0.9);
+  border-radius: 10%;
 }
 .msgs-Col {
   height: 400px;
   overflow-y: scroll;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+.Profile_pic {
+  width: 50px;
+  height: 50px;
+  object-fit: "cover";
+  border-radius: 50%;
+}
+.msg_p {
+  color: rgba(0, 0, 0, 0.9);
+  text-align: center;
+  margin-top: 0.7rem;
+  font-weight: bold;
 }

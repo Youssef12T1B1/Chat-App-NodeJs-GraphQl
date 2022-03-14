@@ -33,4 +33,9 @@ type Mutation{
     )  : Message!  
         
 }  
+ type Subscription{
+   newMessage: Message!
+ }
+
+
 `

@@ -44,20 +44,20 @@ if(!users || loading){
   
       return(
     <div role='button' 
-     className={ClassNames('d-flex p-3 dispaly_users', { 'bg-white': selecteUser, 'text-gray':selecteUser})}
+     className={ClassNames('dispaly_users d-flex justify-content-md-start p-3 ', {  'text-gray':selecteUser})}
       key={user.username} 
       onClick={()=> Dispatch({type:'SetSelectedUser', payload:user.username})}>
 
-      <Image src={Profile_Pic} roundedCircle className="mr-2 " style={{width:50, height:50,objectFit:'cover'}}></Image>
-      <div >
+      <Image src={Profile_Pic} className="Profile_pic"></Image>
+      <div className='d-none d-md-block ms-2' >
       <p className="text-success m-0">{user.username}</p>
-      <p className={ClassNames('font-weight-light m-0', { 'text-black': selecteUser, 'text-white':!selecteUser})}>{user.latestMessage ? user.latestMessage.body : 'You are now connected'}</p>
+      <p className={ClassNames('font-weight-light m-0', { 'text-white': selecteUser, 'text-black':!selecteUser})}>{user.latestMessage ? user.latestMessage.body : 'You are now connected'}</p>
       </div>
     </div>)
 })}
 
     return(
-       <Col className="p-0 bg-black "  xs={4}>
+       <Col className="p-0"  xs={2} md={4}>
    {Display_users}
    </Col>
     )
