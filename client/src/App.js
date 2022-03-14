@@ -5,10 +5,11 @@ import ApolloProvider from './apollo';
 
 import { BrowserRouter,Routes , Route} from 'react-router-dom';
 import Register from './pages/register';
-import MainPage from './pages/main';
+import MainPage from './pages/mainPage/main';
 import Login from './pages/login';
 
 import {AuthProvider} from './context/auth'
+import {MessageProvider} from './context/message'
 import DynamicRoute from './DynamicRoute'
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
   return (
     <ApolloProvider>
       <AuthProvider>
+        <MessageProvider>
         <BrowserRouter>
         <Container className='pt-5 '>
            <Routes>
@@ -38,6 +40,7 @@ function App() {
            </Routes>
         </Container>
       </BrowserRouter>
+      </MessageProvider>
     </AuthProvider>
     </ApolloProvider>
   );

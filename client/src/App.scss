@@ -1,6 +1,6 @@
 $blue: #1877f2;
 $green: #42b72a;
-$gray-600: rgb(245, 245, 245);
+// $gray-600: rgb(245, 245, 245);
 @import "~bootstrap/scss/bootstrap";
 
 body {
@@ -11,4 +11,12 @@ body {
     rgba(43, 70, 192, 0.9) 50%,
     rgba(233, 149, 33, 0.9) 100%
   );
+}
+
+.dispaly_users:hover {
+  background-color: gray;
+}
+.msgs-Col {
+  height: 400px;
+  overflow-y: scroll;
 }
