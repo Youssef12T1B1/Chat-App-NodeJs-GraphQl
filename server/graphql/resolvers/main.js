@@ -20,7 +20,5 @@ module.exports={
         ...messageResolver.Mutation
 
     },
-    Subscription:{
-        ...messageResolver.Subscription,
-    }
+
 }
