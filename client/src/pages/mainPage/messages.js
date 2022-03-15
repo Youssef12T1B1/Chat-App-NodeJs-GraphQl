@@ -21,6 +21,7 @@ query getMessage($sender: String!){
 const SendMessage = gql`
    mutation($receiver:String!,$body:String!){
     sendMessage( receiver:$receiver,body:$body){
+      _id
       body
       sender
       createdAt
@@ -89,7 +90,7 @@ if(!messages && !messagesLoading){
   Display_messages = <p className='msg_p'>Start a conversations ..</p>
 }else if (messages?.length >0){
   Display_messages = messages.map((m)=>(
-   <Message  message = {m}/>
+   <Message key={m._id}  message = {m}/>
   ))
 }else if(messagesLoading){
   Display_messages = <p className='msg_p'>Loading..</p>

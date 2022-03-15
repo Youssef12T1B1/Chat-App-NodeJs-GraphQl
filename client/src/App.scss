@@ -37,3 +37,11 @@ body {
   margin-top: 0.7rem;
   font-weight: bold;
 }
+
+.react_btn:hover {
+  text-decoration: none;
+}
+
+.btn:focus {
+  box-shadow: none;
+}

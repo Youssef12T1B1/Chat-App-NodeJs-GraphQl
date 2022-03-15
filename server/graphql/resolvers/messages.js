@@ -1,8 +1,8 @@
 const User = require('../../models/user')
 const Message = require('../../models/message')
+const Reaction = require('../../models/reaction')
 
-
-const { UserInputError, AuthenticationError} = require('apollo-server')
+const { UserInputError, AuthenticationError, ForbiddenError} = require('apollo-server')
 
 
 module.exports ={
@@ -62,6 +62,43 @@ module.exports ={
                 throw err
             }
 
+        },
+        reactMsg: async(_, {id, content}, {user}) =>{
+            const reactions = ['❤️', '😆', '😯', '😢', '😡', '👍', '👎']
+          try {
+              if(!reactions.includes(content)) {
+                  throw new UserInputError('Invalid Reaction')
+              }
+
+              const username = user? user.username : ''
+              user = await User.findOne({username})
+              if(!user) throw new AuthenticationError('Authentication Failed')
+
+              const message =  await Message.findOne({_id:id})
+              if(!message) throw new UserInputError('No msg')
+
+              if(message.sender !== user.username && message.receiver !== user.username ){
+                   throw new ForbiddenError('Unauthorized')
+              }
+
+              let reaction = await Reaction.findOne( {messageId: message._id , userId: user._id })
+               
+              if(reaction){
+                  reaction.content = content
+                  await reaction.save()
+
+              }else{
+                  reaction =  await Reaction.create({
+                    messageId:message._id,
+                    userId:user._id,
+                    content
+                  })
+              }
+              return reaction
+
+          } catch (err) {
+              console.log(err);
+          }
         }
     },
 

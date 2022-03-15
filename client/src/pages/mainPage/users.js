@@ -9,6 +9,7 @@ import { useMessageDispatch, useMessageState } from '../../context/message';
 const GetUsers =gql`
 query {
   getUser {
+      _id
       username
       email
       createdAt
