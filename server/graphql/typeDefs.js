@@ -16,6 +16,7 @@ type Message {
   sender: String!
   receiver:String!
   createdAt : String!
+  reactions: [Reaction]
 
 }
 type Reaction{

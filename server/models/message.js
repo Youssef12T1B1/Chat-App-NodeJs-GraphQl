@@ -10,7 +10,11 @@ const messageSchema = new mongoose.Schema({
     },
     sender:{
         type: String 
-    }
+    },
+    reactions:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'reaction'
+    }]
 
 
 

@@ -17,10 +17,12 @@ module.exports ={
                 const messages = await Message.find(
                     {
                     receiver:{  $in: usernames },
-                    sender:{  $in: usernames }
-
+                    sender:{  $in: usernames },
+          
                 }
-                ).sort({'createdAt': -1})
+                )
+                .populate('reactions')
+                .sort({'createdAt': -1})
 
                return messages
             } catch (err) {

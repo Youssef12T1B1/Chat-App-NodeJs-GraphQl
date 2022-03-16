@@ -36,6 +36,7 @@ const messageReducer = (state, action) =>{
             Otherusers = [...state.users]
             
              userFound = Otherusers.findIndex((u)=> u.username === username)
+            message.reactions = []
              let NewUser = {
                  ...Otherusers[userFound],
                  messages: [message, ...Otherusers[userFound].messages]

@@ -1,10 +1,24 @@
 import React, { useState } from "react";
 import classNames from "classnames";
 import { useAuthState } from "../../context/auth";
+import { gql, useMutation } from "@apollo/client"; 
 import { Button, OverlayTrigger, Popover, Tooltip} from 'react-bootstrap'
 import moment from 'moment'
 
+
 const reactions = ['❤️', '😆', '😯', '😢', '😡', '👍', '👎']
+ 
+const Message_Reaction = gql`
+mutation reactMsg($id:ID!, $content:String!){
+  reactMsg(id:$id, content:$content){
+       _id 
+  }
+}
+
+
+`
+
+
 
 export default function Message({ message }){
 
@@ -13,8 +27,15 @@ export default function Message({ message }){
     const send = message.sender === user.username
      const to = !send
 
+     const [reactToMsg] = useMutation(Message_Reaction,{
+        onCompleted: (data)=>{
+          setShowPopover(false)
+        },
+        onError: err=> console.log(err)
+     })
      const reactMsg = (reaction)=>{
-           console.log(`reaction ${reaction} to message:`);
+        
+           reactToMsg({variables:{id:message._id, content:reaction}})
      }
      const reactionBtn = 
        (
@@ -24,11 +45,12 @@ export default function Message({ message }){
         show={showPopover}
         onToggle={setShowPopover}
         transition={false}
+        rootClose
         overlay={
           <Popover className="rounded-pill">
-            <Popover.Body>
+            <Popover.Body className=" d-flex py-1 px-0 align-items-center react_container">
             {reactions.map((reaction)=>(
-               <Button variant="link" className="react_btn" key={message._id} onClick={reactMsg(reaction)}>
+               <Button variant="link" className="react_btn" onClick={()=>reactMsg(reaction)}>
                  {reaction}     
                </Button>
             ))}
@@ -68,6 +90,13 @@ export default function Message({ message }){
             'bg-secondary': to
 
         })}>
+          {message.reactions.length> 0 && (
+            <div className="bg-secondary p-1 rounded-pill">
+
+                  {message.reactions.map((r)=> r.content)}
+
+            </div>
+          )}
             <p  className='text-white' key={message._id}> {message.body} </p>
         </div>
         

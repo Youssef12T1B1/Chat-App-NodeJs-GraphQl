@@ -13,6 +13,10 @@ query getMessage($sender: String!){
        sender
        receiver
        createdAt
+       reactions{
+         _id
+         content
+       }
   }
 }
 
