@@ -1,13 +1,13 @@
-const { ApolloServer } = require('apollo-server');
-const Resolver = require('./graphql/resolvers/main')
-const TypeDefs = require('./graphql/typeDefs')
-const connectDB = require('./config/db')
-const Is_Auth = require('./Middleware/auth')
+const { ApolloServer } = require("apollo-server");
+const Resolver = require("./graphql/resolvers/main");
+const TypeDefs = require("./graphql/typeDefs");
+const connectDB = require("./config/db");
+const Is_Auth = require("./Middleware/auth");
 
-connectDB()
+connectDB();
 
-const resolvers = Resolver
-const typeDefs = TypeDefs
+const resolvers = Resolver;
+const typeDefs = TypeDefs;
 
 const server = new ApolloServer({
   typeDefs,
