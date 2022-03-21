@@ -39,4 +39,7 @@ module.exports = gql`
     sendMessage(receiver: String!, body: String!): Message!
     reactMsg(id: ID!, content: String!): Reaction!
   }
+  type Subscription {
+    newMessage: Message!
+  }
 `;

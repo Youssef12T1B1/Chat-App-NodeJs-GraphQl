@@ -1,7 +1,8 @@
 const User = require("../../models/user");
 const Message = require("../../models/message");
 const Reaction = require("../../models/reaction");
-
+const { PubSub, withFilter } = require("graphql-subscriptions");
+const pubsub = new PubSub();
 const {
   UserInputError,
   AuthenticationError,
@@ -48,7 +49,7 @@ module.exports = {
           receiver,
           body,
         });
-
+        pubsub.publish("NEW_MSG", { newMessage: message });
         return message;
       } catch (err) {
         console.log(err);
@@ -96,6 +97,22 @@ module.exports = {
       } catch (err) {
         console.log(err);
       }
+    },
+  },
+  Subscription: {
+    newMessage: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(["NEW_MSG"]),
+        ({ newMessage }, _, { user }) => {
+          if (
+            newMessage.receiver === user.username ||
+            newMessage.sender === user.username
+          ) {
+            return true;
+          }
+          return false;
+        }
+      ),
     },
   },
 };
