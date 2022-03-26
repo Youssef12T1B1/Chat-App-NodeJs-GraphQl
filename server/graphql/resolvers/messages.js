@@ -101,18 +101,7 @@ module.exports = {
   },
   Subscription: {
     newMessage: {
-      subscribe: withFilter(
-        () => pubsub.asyncIterator(["NEW_MSG"]),
-        ({ newMessage }, _, { user }) => {
-          if (
-            newMessage.receiver === user.username ||
-            newMessage.sender === user.username
-          ) {
-            return true;
-          }
-          return false;
-        }
-      ),
+      subscribe: () => pubsub.asyncIterator(["NEW_MSG"]),
     },
   },
 };
